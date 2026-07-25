@@ -5,14 +5,14 @@
     <parent>
         <groupId>com.guicedee</groupId>
         <artifactId>parent</artifactId>
-        <version>2.1.1-SNAPSHOT</version>
+        <version>2.2.0</version>
     </parent>
 
     <groupId>com.guicedee</groupId>
     <artifactId>consul</artifactId>
 
     <packaging>jar</packaging>
-    <version>2.1.1-SNAPSHOT</version>
+    <version>2.2.0</version>
     <name>Guiced Consul</name>
     <description>Integrates Vert.x Consul Client for service registration, health checks, and KV access</description>
 
