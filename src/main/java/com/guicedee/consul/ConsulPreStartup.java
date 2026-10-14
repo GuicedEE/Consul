@@ -1,5 +1,7 @@
 package com.guicedee.consul;
 
+import com.guicedee.client.utils.ClassLoading;
+
 import com.guicedee.client.IGuiceContext;
 import com.guicedee.client.services.lifecycle.IGuicePreStartup;
 import com.guicedee.vertx.spi.VertXPreStartup;
@@ -44,7 +46,7 @@ public class ConsulPreStartup implements IGuicePreStartup<ConsulPreStartup>
     {
         for (PackageInfo packageInfo : scanResult.getPackageInfo())
         {
-            var annotationInfo = packageInfo.getAnnotationInfo(ConsulOptions.class.getName());
+            var annotationInfo = packageInfo.getDirectAnnotationInfo(ConsulOptions.class.getName());
             if (annotationInfo != null)
             {
                 var params = annotationInfo.getParameterValues();
@@ -122,7 +124,7 @@ public class ConsulPreStartup implements IGuicePreStartup<ConsulPreStartup>
             if (classInfo.getName().endsWith(".package-info")) continue;
             try
             {
-                Class<?> clazz = classInfo.loadClass();
+                Class<?> clazz = ClassLoading.loadClass(classInfo);
                 ConsulOptions annotation = clazz.getAnnotation(ConsulOptions.class);
                 if (annotation != null)
                 {
