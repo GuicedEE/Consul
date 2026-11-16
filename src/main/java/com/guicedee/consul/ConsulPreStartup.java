@@ -178,26 +178,9 @@ public class ConsulPreStartup implements IGuicePreStartup<ConsulPreStartup>
      */
     public static String envForName(String name, String property, String defaultValue)
     {
-        String normalizedName = name.toUpperCase().replace('-', '_').replace('.', '_');
-        // Try name-scoped: CONSUL_{NAME}_{PROPERTY}
-        String scopedKey = "CONSUL_" + normalizedName + "_" + property;
-        String scopedValue = System.getProperty(scopedKey);
-        if (scopedValue == null) scopedValue = System.getenv(scopedKey);
-        if (scopedValue == null) scopedValue = System.getenv(scopedKey.toUpperCase());
-        if (scopedValue != null && !scopedValue.isBlank())
-        {
-            return scopedValue;
-        }
-        // Try global: CONSUL_{PROPERTY}
-        String globalKey = "CONSUL_" + property;
-        String globalValue = System.getProperty(globalKey);
-        if (globalValue == null) globalValue = System.getenv(globalKey);
-        if (globalValue == null) globalValue = System.getenv(globalKey.toUpperCase());
-        if (globalValue != null && !globalValue.isBlank())
-        {
-            return globalValue;
-        }
-        return defaultValue;
+        String normalizedName = name.toUpperCase(java.util.Locale.ROOT).replace('-', '_').replace('.', '_');
+        return com.guicedee.client.Environment.getSystemPropertyOrEnvironment(
+                java.util.List.of("CONSUL_" + normalizedName + "_" + property, "CONSUL_" + property), defaultValue);
     }
 
     @Override

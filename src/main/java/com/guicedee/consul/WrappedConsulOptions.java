@@ -48,12 +48,8 @@ public class WrappedConsulOptions implements ConsulOptions
 
     @Override public Class<? extends Annotation> annotationType() { return ConsulOptions.class; }
     @Override public String value() {
-        // Only check name-scoped override, never global fallback (avoids first-default-wins pollution)
-        String normalizedName = name.toUpperCase().replace('-', '_').replace('.', '_');
-        String scopedKey = "CONSUL_" + normalizedName + "_NAME";
-        String scopedValue = com.guicedee.client.Environment.getSystemPropertyOrEnvironment(scopedKey, null);
-        if (scopedValue != null && !scopedValue.isBlank()) return scopedValue;
-        return name;
+        String normalizedName = name.toUpperCase(java.util.Locale.ROOT).replace('-', '_').replace('.', '_');
+        return com.guicedee.client.Environment.getSystemPropertyOrEnvironment("CONSUL_" + normalizedName + "_NAME", name);
     }
     @Override public String host() { return ConsulPreStartup.envForName(name, "HOST", host); }
     @Override public int port() { return Integer.parseInt(ConsulPreStartup.envForName(name, "PORT", String.valueOf(port))); }
